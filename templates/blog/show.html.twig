@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body%}
+     <article> 
+            <h2>{{article.title}}</h2>
+            <div class="metadata"> Ecrit le {{article.createdAt | date('d/m/Y')}} à {{article.createdAt | date('H:i')}} dans la catégorie {{article.category.title}} </div>
+            <div class="content"> 
+                <img src="{{article.image}}" alt="">
+                <p> {{article.content | raw}}</p>
+                <hr>
+                <p> {{article.content| raw}}</p>
+                
+            </div>
+    </article>
+        <h1> {{article.comments | length }} Commentaires:</h1>
+    <section id="commentaires">
+        {% for comment in article.comments %}
+            <div class="comment">
+                <div class="row">
+                    <div class="col-3">
+                        {{comment.author}}
+                        <small>{{comment.createdAt | date ('d/m/Y à H:i')}}</small>
+                    </div>
+                    <div class="col">
+                        {{comment.content |raw}}
+                    </div>
+                </div>
+            <div>
+        {%endfor%}
+        {%if app.user%}
+        {{form_start(commentForm)}}
+         {{ form_row(commentForm.author,{'attr':{'placeholder':"Auteur"}})}}
+             {{ form_row(commentForm.content,{'attr':{'placeholder':"Votre commentaires"}})}}
+            <button type="submit" class="btn btn-success">
+                Commenter
+            </button>
+        {{form_end(commentForm)}}
+        {%else%}
+            <h2> vous ne puvez pas mettre des  Commentaires</h1>
+            <a href="{{path('security_login')}}" class="btn btn-success">
+                Commenter
+            </a>
+        {%endif%}
+        
+    </section>
+
+{% endblock %}
